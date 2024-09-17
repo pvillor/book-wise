@@ -52,7 +52,11 @@ export function buildNextAuthOptions(
       async session({ session, user }) {
         return {
           ...session,
-          user,
+          user: {
+            name: user.name,
+            email: user.email,
+            image: user.avatarUrl,
+          },
         }
       },
     },

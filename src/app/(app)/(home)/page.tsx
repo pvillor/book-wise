@@ -1,3 +1,9 @@
+import { SideBar } from './components/side-bar'
+
 export default function Home() {
-  return <h1>Link Start</h1>
+  return (
+    <div className="h-full">
+      <SideBar />
+    </div>
+  )
 }

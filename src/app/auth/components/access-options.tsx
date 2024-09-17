@@ -1,11 +1,23 @@
 'use client'
-import { signIn } from 'next-auth/react'
+import { redirect, useRouter } from 'next/navigation'
+import { signIn, useSession } from 'next-auth/react'
 
 import { GithubIcon } from '../../assets/github-icon'
 import { GoogleIcon } from '../../assets/google-icon'
 import { RocketIcon } from '../../assets/rocket-icon'
 
 export function AccessOptions() {
+  const session = useSession()
+  const router = useRouter()
+
+  if (session.status === 'authenticated') {
+    redirect('/')
+  }
+
+  function handleAccessAsGuest() {
+    router.push('/')
+  }
+
   return (
     <div className="w-[372px] flex flex-col gap-4 text-gray-100">
       <div
@@ -22,7 +34,10 @@ export function AccessOptions() {
         <GithubIcon />
         <p>Entrar com GitHub</p>
       </div>
-      <div className="p-5 flex items-center gap-5 font-bold bg-gray-600 rounded-lg hover:cursor-pointer">
+      <div
+        className="p-5 flex items-center gap-5 font-bold bg-gray-600 rounded-lg hover:cursor-pointer"
+        onClick={handleAccessAsGuest}
+      >
         <RocketIcon />
         <p>Acessar como visitante</p>
       </div>

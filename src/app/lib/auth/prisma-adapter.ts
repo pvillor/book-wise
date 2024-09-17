@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { Adapter } from 'next-auth/adapters'
-import { destroyCookie, parseCookies, setCookie } from 'nookies'
+import { setCookie } from 'nookies'
 
 import { prisma } from '../prisma'
 
@@ -10,36 +10,7 @@ export function PrismaAdapter(
 ): Adapter {
   return {
     async createUser(user) {
-      const { '@bookwise:userId': userIdOnCookies } = parseCookies({ req })
-
-      if (!userIdOnCookies) {
-        const newUser = await prisma.user.create({
-          data: {
-            name: user.name,
-            email: user.email,
-            avatarUrl: user.avatarUrl,
-          },
-        })
-
-        setCookie({ res }, '@bookwise:userId', newUser.id, {
-          maxAge: 60 * 60 * 24 * 7, // 7 days
-          path: '/',
-        })
-
-        return {
-          id: newUser.id,
-          name: newUser.name,
-          username: null,
-          avatarUrl: newUser.avatarUrl!,
-          email: newUser.email!,
-          emailVerified: null,
-        }
-      }
-
-      const prismaUser = await prisma.user.update({
-        where: {
-          id: userIdOnCookies,
-        },
+      const newUser = await prisma.user.create({
         data: {
           name: user.name,
           email: user.email,
@@ -47,16 +18,17 @@ export function PrismaAdapter(
         },
       })
 
-      destroyCookie({ res }, '@bookwise:userId', {
+      setCookie({ res }, '@bookwise:userId', newUser.id, {
+        maxAge: 60 * 60 * 24 * 7, // 7 days
         path: '/',
       })
 
       return {
-        id: prismaUser.id,
-        name: prismaUser.name,
+        id: newUser.id,
+        name: newUser.name,
         username: null,
-        avatarUrl: prismaUser.avatarUrl!,
-        email: prismaUser.email!,
+        avatarUrl: newUser.avatarUrl!,
+        email: newUser.email!,
         emailVerified: null,
       }
     },
@@ -172,7 +144,7 @@ export function PrismaAdapter(
     },
 
     async createSession({ sessionToken, userId, expires }) {
-      prisma.session.create({
+      await prisma.session.create({
         data: {
           userId,
           expires,
