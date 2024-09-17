@@ -1,9 +1,7 @@
 import Image from 'next/image'
 
-import { GithubIcon } from '../assets/github-icon'
-import { GoogleIcon } from '../assets/google-icon'
 import loginImage from '../assets/login-image.png'
-import { RocketIcon } from '../assets/rocket-icon'
+import { AccessOptions } from './components/access-options'
 
 export default function Login() {
   return (
@@ -19,20 +17,7 @@ export default function Login() {
             </h2>
           </div>
 
-          <div className="w-[372px] flex flex-col gap-4 text-gray-100">
-            <div className="p-5 flex items-center gap-5 font-bold bg-gray-600 rounded-lg hover:cursor-pointer">
-              <GoogleIcon />
-              <p>Entrar com Google</p>
-            </div>
-            <div className="p-5 flex items-center gap-5 font-bold bg-gray-600 rounded-lg hover:cursor-pointer">
-              <GithubIcon />
-              <p>Entrar com GitHub</p>
-            </div>
-            <div className="p-5 flex items-center gap-5 font-bold bg-gray-600 rounded-lg hover:cursor-pointer">
-              <RocketIcon />
-              <p>Acessar como visitante</p>
-            </div>
-          </div>
+          <AccessOptions />
         </div>
       </div>
     </main>
