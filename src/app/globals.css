@@ -20,7 +20,7 @@
   --gray-800: #0E1116;
 }
 
-:focus {
+/* :focus {
   outline: none;
-  box-shadow: 0 0 0 12px var(--green-200);
-}
+  box-shadow: 0 0 12px var(--green-200);
+} */
