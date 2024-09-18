@@ -23,7 +23,7 @@ export function SideBar() {
   }
 
   return (
-    <aside className="flex flex-col justify-between items-center h-full w-[232px] bg-gray-700 text-white pt-10 pb-6">
+    <aside className="flex flex-col justify-between items-center h-full w-[232px] bg-gray-700 text-white pt-10 pb-6 rounded-xl">
       <SideBarTabs isCurrentUserAuthenticated={isCurrentUserAuthenticated} />
 
       {isCurrentUserAuthenticated ? (

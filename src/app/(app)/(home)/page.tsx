@@ -1,9 +1,5 @@
-import { SideBar } from './components/sidebar'
+import { redirect } from 'next/navigation'
 
 export default function Home() {
-  return (
-    <div className="h-full">
-      <SideBar />
-    </div>
-  )
+  redirect('/auth')
 }

@@ -11,11 +11,11 @@ export function AccessOptions() {
   const router = useRouter()
 
   if (session.status === 'authenticated') {
-    redirect('/')
+    redirect('/start')
   }
 
   function handleAccessAsGuest() {
-    router.push('/')
+    router.push('/start')
   }
 
   return (

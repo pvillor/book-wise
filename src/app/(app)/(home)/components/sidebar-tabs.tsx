@@ -1,7 +1,8 @@
 import * as Tabs from '@radix-ui/react-tabs'
 import Image from 'next/image'
+import { usePathname } from 'next/navigation'
 import { Binoculars, ChartLineUp, User } from 'phosphor-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import logo from '@/app/assets/bookwise-logo.svg'
 
@@ -12,7 +13,13 @@ interface SideBarTabsProps {
 }
 
 export function SideBarTabs({ isCurrentUserAuthenticated }: SideBarTabsProps) {
-  const [currentTab, setCurrentTab] = useState('start')
+  const pathName = usePathname()
+
+  const [currentTab, setCurrentTab] = useState(pathName.substring(1))
+
+  useEffect(() => {
+    setCurrentTab(pathName.substring(1))
+  }, [pathName])
 
   return (
     <Tabs.Root
