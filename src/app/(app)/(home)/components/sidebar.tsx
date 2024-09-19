@@ -28,7 +28,7 @@ export function SideBar() {
 
       {isCurrentUserAuthenticated ? (
         <div
-          className="flex items-center gap-3 hover:cursor-pointer"
+          className="flex items-center gap-3 py-1 px-2 rounded-[4px] hover:cursor-pointer hover:bg-slate-50/5"
           onClick={handleSignOut}
         >
           <Image
@@ -36,7 +36,7 @@ export function SideBar() {
             alt=""
             width={32}
             height={32}
-            className=" rounded-full p-px bg-gradient-to-b from-green-100 to-purple-100"
+            className="rounded-full p-px bg-gradient-to-b from-green-100 to-purple-100"
           />
 
           <span className="text-gray-200 font-bold leading-relaxed">
@@ -47,7 +47,7 @@ export function SideBar() {
         </div>
       ) : (
         <div
-          className="flex items-center gap-3 hover:cursor-pointer"
+          className="flex items-center gap-3 py-1 px-2 rounded-[4px] hover:cursor-pointer hover:bg-slate-50/5"
           onClick={handleSignIn}
         >
           <span className="text-gray-200 font-bold leading-relaxed">
