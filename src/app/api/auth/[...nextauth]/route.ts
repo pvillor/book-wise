@@ -9,7 +9,6 @@ export function buildNextAuthOptions(
   req: NextApiRequest,
   res: NextApiResponse,
 ): NextAuthOptions {
-  console.log(req, res)
   return {
     adapter: PrismaAdapter(req, res),
 
