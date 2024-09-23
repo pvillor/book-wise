@@ -19,3 +19,21 @@
   --gray-700: #181C2A;
   --gray-800: #0E1116;
 }
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--gray-600) var(--gray-700);
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--gray-700);
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--gray-600);
+  border-radius: 9999px;
+}

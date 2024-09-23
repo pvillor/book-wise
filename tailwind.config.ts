@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss'
+import { PluginAPI } from 'tailwindcss/types/config'
 
 const config: Config = {
   content: [
@@ -27,6 +28,26 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }: PluginAPI) {
+      addUtilities({
+        /* Estilos gerais da barra de rolagem */
+        '.scrollbar-custom': {
+          'scrollbar-width': 'thin', // Para navegadores como Firefox
+          'scrollbar-color': 'var(--gray-600) var(--gray-700)', // Cor da barra (var(--gray-600) = gray-600, var(--gray-700) = gray-700)
+        },
+        '.scrollbar-custom::-webkit-scrollbar': {
+          width: '6px', // Largura da barra de rolagem no Chrome, Safari e Opera
+        },
+        '.scrollbar-custom::-webkit-scrollbar-track': {
+          background: 'var(--gray-700)', // Fundo da barra de rolagem (gray-700)
+        },
+        '.scrollbar-custom::-webkit-scrollbar-thumb': {
+          background: 'var(--gray-600)', // Cor da barrinha de rolagem (gray-600)
+          borderRadius: '9999px', // Deixa a barrinha arredondada
+        },
+      })
+    },
+  ],
 }
 export default config
