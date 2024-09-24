@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { CaretRight, ChartLineUp, Star } from 'phosphor-react'
 
-import revolucaoDosBichos from '@/app/assets/books/revolucao-bichos.png'
+import revolucaoDosBichos from '@/../public/images/books/a-revolucao-dos-bixos.jpg'
 
 import { RatingsFeed } from './components/ratings'
 

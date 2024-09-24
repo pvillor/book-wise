@@ -1,6 +1,6 @@
 import Image from 'next/image'
 
-import loginImage from '../assets/login-image.png'
+import loginImage from '../assets/login-image.jpg'
 import { AccessOptions } from './components/access-options'
 
 export default function Login() {

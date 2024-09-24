@@ -1,19 +1,66 @@
 'use client'
 
+import { getYear } from 'date-fns'
 import Image from 'next/image'
 import {
   BookmarkSimple,
   BookOpen,
   Books,
   MagnifyingGlass,
-  Star,
   User,
   UserList,
 } from 'phosphor-react'
+import { useMemo } from 'react'
+import { useQuery } from 'react-query'
 
-import revolucaoDosBichos from '@/app/assets/books/revolucao-bichos.png'
+import { BookRate } from './components/book-rate'
+import { getProfile } from './data/get-profile'
 
 export default function Profile() {
+  const { data: user } = useQuery({
+    queryKey: ['profile'],
+    queryFn: getProfile,
+  })
+
+  const userBooksSummary = useMemo(() => {
+    return user?.books.reduce(
+      (acc, book) => {
+        acc.totalPages += book.totalPages
+
+        if (!acc.authors.some((author) => author === book.author)) {
+          acc.authors.push(book.author)
+        }
+
+        book.categories.map(
+          ({ category }) =>
+            (acc.categories[category.name] =
+              (acc.categories[category.name] || 0) + 1),
+        )
+        return acc
+      },
+      {
+        totalPages: 0,
+        authors: [] as string[],
+        categories: {} as Record<string, number>,
+      },
+    )
+  }, [user?.books])
+
+  const mostReadCategory = useMemo(() => {
+    if (!userBooksSummary?.categories) return null
+
+    return Object.entries(userBooksSummary?.categories).reduce(
+      (acc, [category, count]) => {
+        return count > acc.count ? { category, count } : acc
+      },
+      { category: 'Nenhuma', count: 0 },
+    )
+  }, [userBooksSummary?.categories])
+
+  if (!user) {
+    return null
+  }
+
   return (
     <div className="py-12 px-24 flex-1 space-y-10">
       <div className="flex gap-3 pt-1">
@@ -35,131 +82,24 @@ export default function Profile() {
               />
             </div>
 
-            <div className="space-y-6">
-              <div className="space-y-2">
-                <span className="text-gray-400 text-sm">Há 2 dias</span>
-                <div className="w-[624px] p-6 space-y-6 bg-gray-700 rounded-lg border-[2px] border-transparent hover:border-gray-600 hover:cursor-pointer">
-                  <div className="flex gap-6">
-                    <Image
-                      src={revolucaoDosBichos}
-                      alt=""
-                      className="h-[134px] w-[98px] rounded-[4px]"
-                    />
-
-                    <div className="space-y-3">
-                      <div className="h-full flex flex-col justify-between">
-                        <div>
-                          <h4 className="text-gray-100 leading-snug font-semibold text-lg">
-                            A revolução dos bichos
-                          </h4>
-                          <span className="text-gray-400 text-sm leading-relaxed">
-                            George Orwell
-                          </span>
-                        </div>
-
-                        <div className="flex gap-1">
-                          <Star
-                            size={16}
-                            className="text-purple-100"
-                            weight="fill"
-                          />
-                          <Star
-                            size={16}
-                            className="text-purple-100"
-                            weight="fill"
-                          />
-                          <Star
-                            size={16}
-                            className="text-purple-100"
-                            weight="fill"
-                          />
-                          <Star
-                            size={16}
-                            className="text-purple-100"
-                            weight="fill"
-                          />
-                          <Star size={16} className="text-purple-100" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <p className="text-gray-300 font-light text-sm line-clamp-2">
-                    Nec tempor nunc in egestas. Euismod nisi eleifend at et in
-                    sagittis. Penatibus id vestibulum imperdiet a at imperdiet
-                    lectu
-                  </p>
-                </div>
-              </div>
-              <div className="space-y-2">
-                <span className="text-gray-400 text-sm">Há 2 dias</span>
-                <div className="w-[624px] p-6 space-y-6 bg-gray-700 rounded-lg border-[2px] border-transparent hover:border-gray-600 hover:cursor-pointer">
-                  <div className="flex gap-6">
-                    <Image
-                      src={revolucaoDosBichos}
-                      alt=""
-                      className="h-[134px] w-[98px] rounded-[4px]"
-                    />
-
-                    <div className="space-y-3">
-                      <div className="h-full flex flex-col justify-between">
-                        <div>
-                          <h4 className="text-gray-100 leading-snug font-semibold text-lg">
-                            A revolução dos bichos
-                          </h4>
-                          <span className="text-gray-400 text-sm leading-relaxed">
-                            George Orwell
-                          </span>
-                        </div>
-
-                        <div className="flex gap-1">
-                          <Star
-                            size={16}
-                            className="text-purple-100"
-                            weight="fill"
-                          />
-                          <Star
-                            size={16}
-                            className="text-purple-100"
-                            weight="fill"
-                          />
-                          <Star
-                            size={16}
-                            className="text-purple-100"
-                            weight="fill"
-                          />
-                          <Star
-                            size={16}
-                            className="text-purple-100"
-                            weight="fill"
-                          />
-                          <Star size={16} className="text-purple-100" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <p className="text-gray-300 font-light text-sm line-clamp-2">
-                    Nec tempor nunc in egestas. Euismod nisi eleifend at et in
-                    sagittis. Penatibus id vestibulum imperdiet a at imperdiet
-                    lectu
-                  </p>
-                </div>
-              </div>
-            </div>
+            <BookRate />
           </div>
         </div>
 
         <div className="flex flex-col items-center border-l border-gray-700">
           <div className="flex flex-col items-center gap-4">
             <Image
-              src="https://github.com/pvillor.png"
+              src={user?.profile.avatarUrl ?? ''}
               alt=""
               width={72}
               height={72}
               className="rounded-full p-0.5 bg-gradient-to-b from-green-100 to-purple-100"
             />
             <div className="flex flex-col items-center pb-2">
-              <h4 className="text-gray-100 text-xl">Paulo Victor</h4>
-              <span className="text-gray-400 text-sm">membro desde 2024</span>
+              <h4 className="text-gray-100 text-xl">{user?.profile.name}</h4>
+              <span className="text-gray-400 text-sm">
+                membro desde {getYear(user?.profile.createdAt)}
+              </span>
             </div>
           </div>
 
@@ -171,7 +111,7 @@ export default function Profile() {
                 <BookOpen size={32} className="text-green-100" />
                 <div>
                   <h4 className="text-gray-100 leading-snug font-semibold">
-                    3853
+                    {userBooksSummary?.totalPages}
                   </h4>
                   <span className="text-gray-300 text-sm leading-relaxed">
                     Páginas lidas
@@ -182,7 +122,7 @@ export default function Profile() {
                 <Books size={32} className="text-green-100" />
                 <div>
                   <h4 className="text-gray-100 leading-snug font-semibold">
-                    10
+                    {user.books.length}
                   </h4>
                   <span className="text-gray-300 text-sm leading-relaxed">
                     Livros avaliados
@@ -193,7 +133,7 @@ export default function Profile() {
                 <UserList size={32} className="text-green-100" />
                 <div>
                   <h4 className="text-gray-100 leading-snug font-semibold">
-                    8
+                    {userBooksSummary?.authors.length}
                   </h4>
                   <span className="text-gray-300 text-sm leading-relaxed">
                     Autores lidos
@@ -204,7 +144,7 @@ export default function Profile() {
                 <BookmarkSimple size={32} className="text-green-100" />
                 <div>
                   <h4 className="text-gray-100 leading-snug font-semibold">
-                    Computação
+                    {mostReadCategory?.category}
                   </h4>
                   <span className="text-gray-300 text-sm leading-relaxed">
                     Categoria mais lida

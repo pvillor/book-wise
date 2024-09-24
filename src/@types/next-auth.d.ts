@@ -5,6 +5,7 @@ declare module 'next-auth' {
   interface User {
     id: string
     name: string
-    avatarUrl: string
+    email: string | null
+    avatarUrl: string | null
   }
 }

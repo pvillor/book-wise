@@ -1,13 +1,8 @@
-import { NextApiRequest, NextApiResponse } from 'next'
 import { Adapter } from 'next-auth/adapters'
-import { setCookie } from 'nookies'
 
 import { prisma } from '../prisma'
 
-export function PrismaAdapter(
-  req: NextApiRequest,
-  res: NextApiResponse,
-): Adapter {
+export function PrismaAdapter(): Adapter {
   return {
     async createUser(user) {
       const newUser = await prisma.user.create({
@@ -16,11 +11,6 @@ export function PrismaAdapter(
           email: user.email,
           avatarUrl: user.avatarUrl,
         },
-      })
-
-      setCookie({ res }, '@bookwise:userId', newUser.id, {
-        maxAge: 60 * 60 * 24 * 7, // 7 days
-        path: '/',
       })
 
       return {

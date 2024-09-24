@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import { CaretRight, Star } from 'phosphor-react'
 
-import revolucaoDosBichos from '@/app/assets/books/revolucao-bichos.png'
+import revolucaoDosBichos from '@/../public/images/books/a-revolucao-dos-bixos.jpg'
 
 export function RatingsFeed() {
   const session = useSession()
@@ -96,7 +96,7 @@ export function RatingsFeed() {
             <div className="flex justify-between">
               <div className="flex items-start gap-4">
                 <Image
-                  src="https://github.com/pvillor.png"
+                  src="https://github.com/pvillor.jpg"
                   alt=""
                   width={40}
                   height={40}

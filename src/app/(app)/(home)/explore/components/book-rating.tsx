@@ -16,7 +16,7 @@ export function BookRating() {
   const canUserRate = session.status === 'authenticated'
   const currentUser = session.data?.user
 
-  function handleRate() {
+  function handleRateBookIfUserIsAuthenticated() {
     canUserRate ? setRatingFormOpened(true) : setLoginDialogOpened(true)
   }
 
@@ -38,7 +38,7 @@ export function BookRating() {
           {!ratingFormOpened && (
             <button
               className="text-purple-100 text-sm font-bold flex items-center gap-2 py-1 px-2 rounded-[4px] hover:bg-gray-700"
-              onClick={handleRate}
+              onClick={handleRateBookIfUserIsAuthenticated}
             >
               Avaliar
             </button>
@@ -82,7 +82,7 @@ export function BookRating() {
               <div className="flex justify-between">
                 <div className="flex items-center gap-4">
                   <Image
-                    src="https://github.com/pvillor.png"
+                    src="https://github.com/pvillor.jpg"
                     alt=""
                     width={40}
                     height={40}
@@ -134,7 +134,7 @@ export function BookRating() {
             <div className="flex justify-between">
               <div className="flex items-start gap-4">
                 <Image
-                  src="https://github.com/pvillor.png"
+                  src="https://github.com/pvillor.jpg"
                   alt=""
                   width={40}
                   height={40}
@@ -164,7 +164,7 @@ export function BookRating() {
             <div className="flex justify-between">
               <div className="flex items-start gap-4">
                 <Image
-                  src="https://github.com/pvillor.png"
+                  src="https://github.com/pvillor.jpg"
                   alt=""
                   width={40}
                   height={40}
@@ -194,7 +194,7 @@ export function BookRating() {
             <div className="flex justify-between">
               <div className="flex items-start gap-4">
                 <Image
-                  src="https://github.com/pvillor.png"
+                  src="https://github.com/pvillor.jpg"
                   alt=""
                   width={40}
                   height={40}

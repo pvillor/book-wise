@@ -5,12 +5,9 @@ import GoogleProvider, { GoogleProfile } from 'next-auth/providers/google'
 
 import { PrismaAdapter } from '@/app/lib/auth/prisma-adapter'
 
-export function buildNextAuthOptions(
-  req: NextApiRequest,
-  res: NextApiResponse,
-): NextAuthOptions {
+export function buildNextAuthOptions(): NextAuthOptions {
   return {
-    adapter: PrismaAdapter(req, res),
+    adapter: PrismaAdapter(),
 
     providers: [
       GithubProvider({
@@ -64,12 +61,12 @@ export function buildNextAuthOptions(
 
 // Handler para o método POST
 export async function POST(req: NextApiRequest, res: NextApiResponse) {
-  const response = await NextAuth(req, res, buildNextAuthOptions(req, res))
+  const response = await NextAuth(req, res, buildNextAuthOptions())
   return response
 }
 
 // Handler para o método GET (opcionalmente pode usar a mesma lógica se necessário)
 export async function GET(req: NextApiRequest, res: NextApiResponse) {
-  const response = await NextAuth(req, res, buildNextAuthOptions(req, res))
+  const response = await NextAuth(req, res, buildNextAuthOptions())
   return response
 }

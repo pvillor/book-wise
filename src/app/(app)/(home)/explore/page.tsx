@@ -11,7 +11,7 @@ import {
 } from 'phosphor-react'
 import { useState } from 'react'
 
-import revolucaoDosBichos from '@/app/assets/books/revolucao-bichos.png'
+import revolucaoDosBichos from '@/../public/images/books/a-revolucao-dos-bixos.jpg'
 
 import { BookRating } from './components/book-rating'
 import { CategoryTab } from './components/category-tab'
