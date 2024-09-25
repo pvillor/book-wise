@@ -2,9 +2,9 @@
 import { redirect, useRouter } from 'next/navigation'
 import { signIn, useSession } from 'next-auth/react'
 
-import { GithubIcon } from '../../assets/github-icon'
-import { GoogleIcon } from '../../assets/google-icon'
-import { RocketIcon } from '../../assets/rocket-icon'
+import { GithubIcon } from '@/app/assets/github-icon'
+import { GoogleIcon } from '@/app/assets/google-icon'
+import { RocketIcon } from '@/app/assets/rocket-icon'
 
 export function AccessOptions() {
   const session = useSession()

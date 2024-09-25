@@ -1,23 +1,23 @@
 'use client'
 import * as Tabs from '@radix-ui/react-tabs'
 import Image from 'next/image'
-import {
-  Binoculars,
-  BookmarkSimple,
-  BookOpen,
-  MagnifyingGlass,
-  Star,
-  X,
-} from 'phosphor-react'
+import { useSearchParams } from 'next/navigation'
+import { Binoculars, BookmarkSimple, BookOpen, Star, X } from 'phosphor-react'
 import { useState } from 'react'
+import { useQuery } from 'react-query'
 
 import revolucaoDosBichos from '@/../public/images/books/a-revolucao-dos-bixos.jpg'
 
 import { BookRating } from './components/book-rating'
 import { CategoryTab } from './components/category-tab'
+import { SearchForm } from './components/search-form'
+import { getBooks } from './data/get-books'
 
 export default function Explore() {
   const [bookRatingsDialogOpened, setBookRatingsDialogOpened] = useState(false)
+  const searchParams = useSearchParams()
+
+  const query = searchParams.get('q')?.toLowerCase()
 
   function handleOpenBookRatingDialog() {
     setBookRatingsDialogOpened(true)
@@ -27,12 +27,20 @@ export default function Explore() {
     setBookRatingsDialogOpened(false)
   }
 
+  const { data } = useQuery({
+    queryKey: ['books', query],
+    queryFn: () => getBooks(query ?? ''),
+  })
+
   return (
     <>
       {bookRatingsDialogOpened && (
         <>
-          <div className="fixed inset-0 bg-black bg-opacity-50" />
-          <div className="absolute top-0 right-0 h-screen overflow-y-auto w-[660px] bg-gray-800 py-16 px-12">
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50"
+            onClick={handleCloseBookRatingDialog}
+          />
+          <div className="fixed top-0 right-0 h-screen overflow-y-auto w-[660px] bg-gray-800 py-16 px-12">
             <button
               className="absolute top-6 right-12"
               onClick={handleCloseBookRatingDialog}
@@ -128,16 +136,7 @@ export default function Explore() {
             <h1 className="text-gray-100 text-2xl font-bold">Explorar</h1>
           </div>
 
-          <div className="w-[433px] py-3.5 px-5 flex border border-gray-500 rounded-[4px] focus-within:border-green-200 group">
-            <input
-              placeholder="Buscar livro ou autor"
-              className="flex-1 bg-transparent outline-none text-gray-200 caret-green-200"
-            />
-            <MagnifyingGlass
-              size={20}
-              className="text-gray-500 group-focus-within:text-green-200"
-            />
-          </div>
+          <SearchForm />
         </div>
 
         <div className="flex flex-col gap-12">
@@ -155,37 +154,60 @@ export default function Explore() {
           </Tabs.Root>
 
           <div className="grid grid-cols-3 gap-5">
-            <div className="flex flex-col gap-3 min-w-[318px]">
-              <div
-                className="py-4 px-5 flex gap-5 bg-gray-700 rounded-lg border-[2px] border-transparent hover:border-gray-600 hover:cursor-pointer"
-                onClick={handleOpenBookRatingDialog}
-              >
-                <Image
-                  src={revolucaoDosBichos}
-                  alt=""
-                  className="h-[152px] w-auto rounded-[4px]"
-                />
-                <div className="flex flex-col justify-between">
-                  <div className="space-y-5">
-                    <div>
-                      <h4 className="text-gray-100 leading-snug font-semibold">
-                        A revolução dos bichos
-                      </h4>
-                      <span className="text-gray-400 text-sm leading-relaxed">
-                        George Orwell
-                      </span>
+            {data?.books.map((book) => {
+              const bookRating =
+                book.ratings.reduce((acc, rating) => acc + rating.rate, 0) /
+                book.ratings.length
+
+              return (
+                <div
+                  key={book.id}
+                  className="flex flex-col gap-3 min-w-[318px]"
+                >
+                  <div
+                    className="py-4 px-5 flex gap-5 bg-gray-700 rounded-lg border-[2px] border-transparent hover:border-gray-600 hover:cursor-pointer"
+                    onClick={handleOpenBookRatingDialog}
+                  >
+                    <Image
+                      src={book.coverUrl}
+                      alt=""
+                      width={108}
+                      height={152}
+                      className="rounded-[4px]"
+                    />
+                    <div className="flex flex-col justify-between">
+                      <div className="space-y-5">
+                        <div>
+                          <h4 className="text-gray-100 leading-snug font-semibold">
+                            {book.name}
+                          </h4>
+                          <span className="text-gray-400 text-sm leading-relaxed">
+                            {book.author}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex gap-1">
+                        {Array.from({ length: bookRating }, (_, index) => (
+                          <Star
+                            key={index}
+                            size={16}
+                            className="text-purple-100"
+                            weight="fill"
+                          />
+                        ))}
+                        {Array.from({ length: 5 - bookRating }, (_, index) => (
+                          <Star
+                            key={index + bookRating}
+                            size={16}
+                            className="text-purple-100"
+                          />
+                        ))}
+                      </div>
                     </div>
                   </div>
-                  <div className="flex gap-1">
-                    <Star size={16} className="text-purple-100" weight="fill" />
-                    <Star size={16} className="text-purple-100" weight="fill" />
-                    <Star size={16} className="text-purple-100" weight="fill" />
-                    <Star size={16} className="text-purple-100" weight="fill" />
-                    <Star size={16} className="text-purple-100" />
-                  </div>
                 </div>
-              </div>
-            </div>
+              )
+            })}
           </div>
         </div>
       </div>
