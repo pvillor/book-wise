@@ -15,7 +15,7 @@ import { useQuery } from 'react-query'
 import revolucaoDosBichos from '@/../public/images/books/a-revolucao-dos-bixos.jpg'
 
 import { BookRating } from './components/book-rating'
-import { CategoriesTags } from './components/categories-tags'
+import { CategoriesTags } from './components/category-tags'
 import { SearchForm } from './components/search-form'
 import { getBooks } from './data/get-books'
 
