@@ -37,6 +37,17 @@ export async function GET(request: NextRequest) {
             contains: query,
           },
         },
+        {
+          categories: {
+            some: {
+              category: {
+                name: {
+                  contains: query,
+                },
+              },
+            },
+          },
+        },
       ],
     },
     orderBy: {

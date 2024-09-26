@@ -16,7 +16,7 @@ export function SearchForm() {
     const query = data.q
 
     if (!query) {
-      return null
+      return router.push('/explore')
     }
 
     router.push(`/explore?q=${query}`)

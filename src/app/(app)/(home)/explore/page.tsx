@@ -1,5 +1,4 @@
 'use client'
-import * as Tabs from '@radix-ui/react-tabs'
 import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
 import {
@@ -16,7 +15,7 @@ import { useQuery } from 'react-query'
 import revolucaoDosBichos from '@/../public/images/books/a-revolucao-dos-bixos.jpg'
 
 import { BookRating } from './components/book-rating'
-import { CategoryTab } from './components/category-tab'
+import { CategoriesTags } from './components/categories-tags'
 import { SearchForm } from './components/search-form'
 import { getBooks } from './data/get-books'
 
@@ -147,18 +146,7 @@ export default function Explore() {
         </div>
 
         <div className="flex flex-col gap-12">
-          <Tabs.Root>
-            <Tabs.List className="flex flex-wrap gap-3">
-              <CategoryTab value="all" title="Tudo" />
-              <CategoryTab value="computing" title="Computação" />
-              <CategoryTab value="education" title="Educação" />
-              <CategoryTab value="fantasy" title="Fantasia" />
-              <CategoryTab value="fiction" title="Ficção Científica" />
-              <CategoryTab value="horror" title="Horror" />
-              <CategoryTab value="hqs" title="HQs" />
-              <CategoryTab value="suspense" title="Suspense" />
-            </Tabs.List>
-          </Tabs.Root>
+          <CategoriesTags />
 
           <div className="grid grid-cols-3 gap-5">
             {data?.books.map((book) => {
