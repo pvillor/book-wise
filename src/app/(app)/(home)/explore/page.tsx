@@ -2,7 +2,14 @@
 import * as Tabs from '@radix-ui/react-tabs'
 import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
-import { Binoculars, BookmarkSimple, BookOpen, Star, X } from 'phosphor-react'
+import {
+  Binoculars,
+  BookmarkSimple,
+  BookOpen,
+  Star,
+  StarHalf,
+  X,
+} from 'phosphor-react'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
 
@@ -155,9 +162,16 @@ export default function Explore() {
 
           <div className="grid grid-cols-3 gap-5">
             {data?.books.map((book) => {
+              const totalRatings = book.ratings.length
               const bookRating =
-                book.ratings.reduce((acc, rating) => acc + rating.rate, 0) /
-                book.ratings.length
+                totalRatings > 0
+                  ? book.ratings.reduce((acc, rating) => acc + rating.rate, 0) /
+                    totalRatings
+                  : 0
+
+              const fullStars = Math.floor(bookRating)
+              const hasHalfStar = bookRating - fullStars >= 0.5
+              const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0)
 
               return (
                 <div
@@ -187,7 +201,7 @@ export default function Explore() {
                         </div>
                       </div>
                       <div className="flex gap-1">
-                        {Array.from({ length: bookRating }, (_, index) => (
+                        {Array.from({ length: fullStars }, (_, index) => (
                           <Star
                             key={index}
                             size={16}
@@ -195,9 +209,18 @@ export default function Explore() {
                             weight="fill"
                           />
                         ))}
-                        {Array.from({ length: 5 - bookRating }, (_, index) => (
+
+                        {hasHalfStar && (
+                          <StarHalf
+                            size={16}
+                            className="text-purple-100"
+                            weight="fill"
+                          />
+                        )}
+
+                        {Array.from({ length: emptyStars }, (_, index) => (
                           <Star
-                            key={index + bookRating}
+                            key={index + fullStars + 1}
                             size={16}
                             className="text-purple-100"
                           />
