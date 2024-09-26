@@ -3,13 +3,13 @@
 import * as Tabs from '@radix-ui/react-tabs'
 import { useRouter } from 'next/navigation'
 
-interface CategoryTabProps {
+interface CategoryTagProps {
   value: string
   title: string
   isSelected: boolean
 }
 
-export function CategoryTab({ value, title, isSelected }: CategoryTabProps) {
+export function CategoryTag({ value, title, isSelected }: CategoryTagProps) {
   const router = useRouter()
 
   function handleFilterByTag(category: string) {

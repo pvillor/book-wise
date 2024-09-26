@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import { useQuery } from 'react-query'
 
 import { getCategories } from '../data/get-categories'
-import { CategoryTab } from './category-tab'
+import { CategoryTag } from './category-tag'
 
 export function CategoriesTags() {
   const searchParams = useSearchParams()
@@ -19,10 +19,10 @@ export function CategoriesTags() {
   return (
     <Tabs.Root>
       <Tabs.List className="flex flex-wrap gap-3">
-        <CategoryTab value="all" title="Tudo" isSelected={!currentTag} />
+        <CategoryTag value="all" title="Tudo" isSelected={!currentTag} />
         {data?.categories.map((category) => {
           return (
-            <CategoryTab
+            <CategoryTag
               key={category.name}
               value={category.name}
               title={category.name}
