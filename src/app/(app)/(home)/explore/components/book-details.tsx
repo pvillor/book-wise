@@ -42,7 +42,7 @@ export function BookDetails({ handleCloseBookRatingDialog }: BookDetailsProps) {
   const formattedBookCategories = bookCategories?.join(', ')
 
   return (
-    <div>
+    <div className="fixed inset-0">
       <div
         className="fixed inset-0 bg-black bg-opacity-50"
         onClick={handleCloseBookRatingDialog}

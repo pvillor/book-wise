@@ -28,7 +28,7 @@ export function RateBook() {
 
   return (
     <div className="flex flex-col gap-10 pt-10">
-      <div className="space-y-4">
+      <div className="space-y-4 mb-3">
         <div className="flex justify-between">
           <h3 className="text-gray-100 text-sm leading-relaxed font-light">
             Avaliações

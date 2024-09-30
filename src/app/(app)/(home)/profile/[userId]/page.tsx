@@ -2,24 +2,44 @@
 
 import { getYear } from 'date-fns'
 import Image from 'next/image'
+import { useParams, useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import {
   BookmarkSimple,
   BookOpen,
   Books,
-  MagnifyingGlass,
+  CaretLeft,
   User,
   UserList,
 } from 'phosphor-react'
 import { useMemo } from 'react'
 import { useQuery } from 'react-query'
+import { z } from 'zod'
 
-import { BookRate } from './components/book-rate'
-import { getProfile } from './data/get-profile'
+import { PageTitle } from '../../components/page-title'
+import { BooksRated } from '../components/books-rated'
+import { SearchForm } from '../components/search-form'
+import { getProfile } from '../data/get-profile'
+
+const currentUserSchema = z
+  .object({
+    id: z.string().nullish(),
+    name: z.string().nullish(),
+    email: z.string().nullish(),
+    image: z.string().nullish(),
+  })
+  .nullish()
 
 export default function Profile() {
+  const session = useSession()
+  const router = useRouter()
+
+  const params = useParams()
+  const userId = z.string().parse(params.userId)
+
   const { data: user } = useQuery({
-    queryKey: ['profile'],
-    queryFn: getProfile,
+    queryKey: ['profile', userId],
+    queryFn: () => getProfile(userId ?? ''),
   })
 
   const userBooksSummary = useMemo(() => {
@@ -57,32 +77,38 @@ export default function Profile() {
     )
   }, [userBooksSummary?.categories])
 
-  if (!user) {
+  if (!user || !userId) {
     return null
+  }
+
+  const authenticatedUser = currentUserSchema.parse(session.data?.user)
+
+  const isAnotherUserProfile = authenticatedUser?.id !== userId
+
+  function handleNavigateToPreviousPage() {
+    router.back()
   }
 
   return (
     <div className="py-12 px-24 flex-1 space-y-10">
-      <div className="flex gap-3 pt-1">
-        <User size={32} className="text-green-100" />
-        <h1 className="text-gray-100 text-2xl font-bold">Perfil</h1>
-      </div>
+      {isAnotherUserProfile ? (
+        <button
+          className="flex gap-3 pt-1"
+          onClick={handleNavigateToPreviousPage}
+        >
+          <CaretLeft size={20} className="text-gray-200" />
+          <h1 className="leading-relaxed text-gray-200">Voltar</h1>
+        </button>
+      ) : (
+        <PageTitle icon={User} title="Perfil" />
+      )}
 
       <div className="flex gap-16 pb-12">
         <div className="flex flex-col gap-10">
           <div className="space-y-8">
-            <div className="w-full py-3.5 px-5 flex border border-gray-500 rounded-[4px] focus-within:border-green-200 group">
-              <input
-                placeholder="Buscar livro avaliado"
-                className="flex-1 bg-transparent outline-none text-gray-200 caret-green-200"
-              />
-              <MagnifyingGlass
-                size={20}
-                className="text-gray-500 group-focus-within:text-green-200"
-              />
-            </div>
+            <SearchForm userId={userId} />
 
-            <BookRate />
+            <BooksRated userId={userId} />
           </div>
         </div>
 
@@ -93,7 +119,7 @@ export default function Profile() {
               alt=""
               width={72}
               height={72}
-              className="rounded-full p-0.5 bg-gradient-to-b from-green-100 to-purple-100"
+              className="size-[72px] rounded-full p-0.5 bg-gradient-to-b from-green-100 to-purple-100"
             />
             <div className="flex flex-col items-center pb-2">
               <h4 className="text-gray-100 text-xl">{user?.profile.name}</h4>

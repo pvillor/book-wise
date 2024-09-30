@@ -2,6 +2,7 @@ import { formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { CaretRight, Star } from 'phosphor-react'
 import { useQuery } from 'react-query'
@@ -12,14 +13,18 @@ import { getRatings } from '../data/get-ratings'
 
 export function RatingsFeed() {
   const session = useSession()
+  const router = useRouter()
 
   const isCurrentUserAuthenticated = session.status === 'authenticated'
-  const currentUser = session.data?.user
 
   const { data } = useQuery({
     queryKey: ['ratings'],
     queryFn: getRatings,
   })
+
+  function handleNavigateToUserProfile(userId: string) {
+    router.push(`/profile/${userId}`)
+  }
 
   return (
     <div className="flex flex-col gap-10">
@@ -37,7 +42,7 @@ export function RatingsFeed() {
             </Link>
           </div>
           <div className="flex flex-col gap-3">
-            <div className="px-6 py-5 space-y-8 bg-gray-600 rounded-lg border-[2px] border-transparent hover:border-gray-500 hover:cursor-pointer">
+            <div className="px-6 py-5 space-y-8 bg-gray-600 rounded-lg border-[2px] border-transparent">
               <div className="w-[560px] h-[152px] flex gap-6">
                 <Image
                   src={revolucaoDosBichos}
@@ -107,6 +112,7 @@ export function RatingsFeed() {
               <div
                 key={rating.id}
                 className="p-6 space-y-8 bg-gray-700 rounded-lg border-[2px] border-transparent hover:border-gray-600 hover:cursor-pointer"
+                onClick={() => handleNavigateToUserProfile(rating.user.id)}
               >
                 <div className="flex justify-between">
                   <div className="flex items-start gap-4">

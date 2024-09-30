@@ -27,7 +27,7 @@ export function TabItem({
   return (
     <Tabs.Trigger
       value={value}
-      className="relative text-gray-400 data-[state=active]:text-gray-100 data-[state=active]:font-bold hover:text-gray-100 hover:cursor-pointer"
+      className={`relative text-gray-400 data-[state=active]:text-gray-100 data-[state=active]:font-bold hover:text-gray-100 hover:cursor-pointer`}
       onClick={() => handleTabNavigation(value)}
     >
       {isSelected && (
@@ -36,7 +36,9 @@ export function TabItem({
           className="absolute -left-1 right-full top-2 h-6 rounded-full bg-gradient-to-b from-green-100 to-purple-100"
         />
       )}
-      <div className="flex gap-3 pl-4 py-2">
+      <div
+        className={`flex gap-3 pl-4 py-2 ${isSelected && 'text-gray-100 font-bold'}`}
+      >
         <Icon size={24} />
         <span className="">{title}</span>
       </div>

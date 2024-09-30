@@ -29,8 +29,8 @@ type GetProfileResponse = {
   }[]
 }
 
-export async function getProfile() {
-  const { data } = await api.get<GetProfileResponse>('/users/profile')
+export async function getProfile(userId: string) {
+  const { data } = await api.get<GetProfileResponse>(`/users/profile/${userId}`)
 
   return data
 }

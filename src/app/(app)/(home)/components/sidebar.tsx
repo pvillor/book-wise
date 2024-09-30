@@ -36,7 +36,7 @@ export function SideBar() {
             alt=""
             width={32}
             height={32}
-            className="rounded-full p-px bg-gradient-to-b from-green-100 to-purple-100"
+            className="size-8 rounded-full p-px bg-gradient-to-b from-green-100 to-purple-100"
           />
 
           <span className="text-gray-200 font-bold leading-relaxed">
