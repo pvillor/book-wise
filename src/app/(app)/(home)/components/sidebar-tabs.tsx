@@ -35,10 +35,6 @@ export function SideBarTabs({ isCurrentUserAuthenticated }: SideBarTabsProps) {
     setCurrentTab(pathName.substring(1))
   }, [pathName])
 
-  if (!currentUser) {
-    return null
-  }
-
   return (
     <Tabs.Root
       className="flex flex-col gap-16  px-12"
