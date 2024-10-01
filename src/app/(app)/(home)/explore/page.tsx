@@ -1,3 +1,5 @@
+import { Suspense } from 'react'
+
 import { BooksList } from './components/books-list'
 import { CategoriesTags } from './components/category-tags'
 import { ExploreTitle } from './components/explore-title'
@@ -13,9 +15,11 @@ export default function Explore() {
       </div>
 
       <div className="flex flex-col gap-12">
-        <CategoriesTags />
+        <Suspense fallback={<div>Loading...</div>}>
+          <CategoriesTags />
 
-        <BooksList />
+          <BooksList />
+        </Suspense>
       </div>
     </div>
   )

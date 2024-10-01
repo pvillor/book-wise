@@ -2,9 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { z } from 'zod'
 
+import { authOptions } from '@/app/lib/auth/options'
 import { prisma } from '@/app/lib/prisma'
-
-import { buildNextAuthOptions } from '../../auth/[...nextauth]/route'
 
 const currentUserSchema = z.object({
   id: z.string(),
@@ -22,7 +21,7 @@ export async function POST(
   request: NextRequest,
   { params }: { params: { bookId: string } },
 ) {
-  const session = await getServerSession(buildNextAuthOptions())
+  const session = await getServerSession(authOptions)
   const currentUser = currentUserSchema.parse(session?.user)
 
   const body = await request.json()
