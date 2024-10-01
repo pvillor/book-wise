@@ -30,11 +30,13 @@ export async function GET(request: NextRequest) {
         {
           name: {
             contains: query,
+            mode: 'insensitive',
           },
         },
         {
           author: {
             contains: query,
+            mode: 'insensitive',
           },
         },
         {
@@ -43,6 +45,7 @@ export async function GET(request: NextRequest) {
               category: {
                 name: {
                   contains: query,
+                  mode: 'insensitive',
                 },
               },
             },

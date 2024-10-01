@@ -32,6 +32,7 @@ export async function GET(
           book: {
             name: {
               contains: query ?? '',
+              mode: 'insensitive',
             },
           },
         },
@@ -39,6 +40,7 @@ export async function GET(
           book: {
             author: {
               contains: query ?? '',
+              mode: 'insensitive',
             },
           },
         },

@@ -14,7 +14,7 @@ export function BooksList() {
   const router = useRouter()
 
   const searchParams = useSearchParams()
-  const query = searchParams.get('q')?.toLowerCase()
+  const query = searchParams.get('q')
 
   function handleOpenBookRatingDialog() {
     setBookRatingsDialogOpened(true)
