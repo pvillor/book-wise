@@ -9,7 +9,7 @@ export async function GET(
 ) {
   const { searchParams } = request.nextUrl
 
-  const query = z.string().default('').parse(searchParams.get('q'))
+  const query = z.string().default('').nullish().parse(searchParams.get('q'))
 
   const ratings = await prisma.rating.findMany({
     select: {
@@ -31,14 +31,14 @@ export async function GET(
         {
           book: {
             name: {
-              contains: query,
+              contains: query ?? '',
             },
           },
         },
         {
           book: {
             author: {
-              contains: query,
+              contains: query ?? '',
             },
           },
         },

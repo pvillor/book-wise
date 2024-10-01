@@ -10,9 +10,18 @@ import { z } from 'zod'
 
 import { queryClient } from '@/app/lib/react-query'
 
+import { createBookRating } from '../data/create-book-rating'
+
 const rateBookForm = z.object({
-  description: z.string().min(3).max(450),
-  rate: z.coerce.number().int().min(1).max(5),
+  description: z
+    .string()
+    .min(3, 'Mínimo de 3 caracteres')
+    .max(450, 'Máximo de 3 caracteres'),
+  rate: z.coerce
+    .number({ invalid_type_error: 'Selecione a nota do livro' })
+    .int()
+    .min(1)
+    .max(5),
 })
 
 type RateBookForm = z.infer<typeof rateBookForm>
@@ -22,7 +31,7 @@ interface RateBookFormProps {
 }
 
 export function RateBookForm({ handleCloseRateBookForm }: RateBookFormProps) {
-  const [selectedIndex, setSelectedIndex] = useState(0)
+  const [selectedStar, setSelectedStar] = useState(0)
   const [hoveredIndex, setHoveredIndex] = useState(0)
 
   const session = useSession()
@@ -42,8 +51,19 @@ export function RateBookForm({ handleCloseRateBookForm }: RateBookFormProps) {
   })
 
   async function handleCreateRating(data: RateBookForm) {
-    console.log({ ...data, bookId })
+    if (!bookId) {
+      return null
+    }
+
+    await createBookRating({
+      description: data.description,
+      rate: data.rate,
+      bookId,
+    })
+
     queryClient.invalidateQueries({ queryKey: ['book-details'] })
+    reset()
+    setSelectedStar(0)
   }
 
   const currentUser = session.data?.user
@@ -83,13 +103,13 @@ export function RateBookForm({ handleCloseRateBookForm }: RateBookFormProps) {
                       size={28}
                       className="text-purple-100 hover:cursor-pointer"
                       weight={
-                        hoveredIndex >= index + 1 || selectedIndex >= index + 1
+                        hoveredIndex >= index + 1 || selectedStar >= index + 1
                           ? 'fill'
                           : 'regular'
                       }
                       onMouseEnter={() => setHoveredIndex(index + 1)}
                       onMouseLeave={() => setHoveredIndex(0)}
-                      onClick={() => setSelectedIndex(index + 1)}
+                      onClick={() => setSelectedStar(index + 1)}
                     />
                   </Radio.RadioGroupItem>
                 ))}
@@ -111,6 +131,12 @@ export function RateBookForm({ handleCloseRateBookForm }: RateBookFormProps) {
             {ratingCharCount}/450
           </span>
         </label>
+        {errors.description && (
+          <span className="text-red-700">{errors.description.message}</span>
+        )}
+        {errors.rate && (
+          <span className="text-red-700">{errors.rate.message}</span>
+        )}
         <div className="flex gap-2">
           <button
             type="button"

@@ -1,15 +1,13 @@
 import { formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import Image from 'next/image'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import { CaretRight, Star } from 'phosphor-react'
+import { Star, StarHalf } from 'phosphor-react'
 import { useQuery } from 'react-query'
 
-import revolucaoDosBichos from '@/../public/images/books/a-revolucao-dos-bixos.jpg'
-
 import { getRatings } from '../data/get-ratings'
+import { UserLastRating } from './user-last-rating'
 
 export function RatingsFeed() {
   const session = useSession()
@@ -28,79 +26,7 @@ export function RatingsFeed() {
 
   return (
     <div className="flex flex-col gap-10">
-      {isCurrentUserAuthenticated && (
-        <div className="space-y-4">
-          <div className="flex justify-between">
-            <h3 className="text-gray-100 text-sm leading-relaxed font-light">
-              Sua última leitura
-            </h3>
-            <Link
-              href="/profile"
-              className="text-purple-100 text-sm font-bold flex items-center gap-2 py-1 px-2 rounded-[4px] hover:bg-gray-700"
-            >
-              Ver todas <CaretRight size={16} />
-            </Link>
-          </div>
-          <div className="flex flex-col gap-3">
-            <div className="px-6 py-5 space-y-8 bg-gray-600 rounded-lg border-[2px] border-transparent">
-              <div className="w-[560px] h-[152px] flex gap-6">
-                <Image
-                  src={revolucaoDosBichos}
-                  alt=""
-                  className="h-full w-auto rounded-[4px]"
-                />
-
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-gray-400 text-sm">Há 2 dias</span>
-
-                    <div className="flex gap-1">
-                      <Star
-                        size={16}
-                        className="text-purple-100"
-                        weight="fill"
-                      />
-                      <Star
-                        size={16}
-                        className="text-purple-100"
-                        weight="fill"
-                      />
-                      <Star
-                        size={16}
-                        className="text-purple-100"
-                        weight="fill"
-                      />
-                      <Star
-                        size={16}
-                        className="text-purple-100"
-                        weight="fill"
-                      />
-                      <Star size={16} className="text-purple-100" />
-                    </div>
-                  </div>
-
-                  <div className="space-y-6">
-                    <div>
-                      <h4 className="text-gray-100 leading-snug font-semibold">
-                        A revolução dos bichos
-                      </h4>
-                      <span className="text-gray-400 text-sm leading-relaxed">
-                        George Orwell
-                      </span>
-                    </div>
-                    {/* max 229 */}
-                    <p className="text-gray-300 font-light text-sm line-clamp-2">
-                      Nec tempor nunc in egestas. Euismod nisi eleifend at et in
-                      sagittis. Penatibus id vestibulum imperdiet a at imperdiet
-                      lectu
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {isCurrentUserAuthenticated && <UserLastRating />}
 
       <div className="space-y-4">
         <h3 className="text-gray-100 text-sm leading-relaxed font-light">
@@ -108,6 +34,10 @@ export function RatingsFeed() {
         </h3>
         <div className="flex flex-col gap-3 pb-8">
           {data?.ratings.map((rating) => {
+            const fullStars = Math.floor(rating.rate)
+            const hasHalfStar = rating.rate - fullStars >= 0.5
+            const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0)
+
             return (
               <div
                 key={rating.id}
@@ -135,11 +65,30 @@ export function RatingsFeed() {
                   </div>
 
                   <div className="flex gap-1">
-                    <Star size={16} className="text-purple-100" weight="fill" />
-                    <Star size={16} className="text-purple-100" weight="fill" />
-                    <Star size={16} className="text-purple-100" weight="fill" />
-                    <Star size={16} className="text-purple-100" weight="fill" />
-                    <Star size={16} className="text-purple-100" />
+                    {Array.from({ length: fullStars }, (_, index) => (
+                      <Star
+                        key={index}
+                        size={16}
+                        className="text-purple-100"
+                        weight="fill"
+                      />
+                    ))}
+
+                    {hasHalfStar && (
+                      <StarHalf
+                        size={16}
+                        className="text-purple-100"
+                        weight="fill"
+                      />
+                    )}
+
+                    {Array.from({ length: emptyStars }, (_, index) => (
+                      <Star
+                        key={index + fullStars + 1}
+                        size={16}
+                        className="text-purple-100"
+                      />
+                    ))}
                   </div>
                 </div>
                 <div className="w-[560px] h-[152px] flex gap-5">
