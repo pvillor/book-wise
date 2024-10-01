@@ -1,3 +1,5 @@
+'use client'
+
 import { formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import Image from 'next/image'
@@ -25,7 +27,7 @@ export function RatingsFeed() {
   }
 
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex flex-col gap-10 w-[608px]">
       {isCurrentUserAuthenticated && <UserLastRating />}
 
       <div className="space-y-4">
