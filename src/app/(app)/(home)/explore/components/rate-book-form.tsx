@@ -62,6 +62,9 @@ export function RateBookForm({ handleCloseRateBookForm }: RateBookFormProps) {
     })
 
     queryClient.invalidateQueries({ queryKey: ['book-details'] })
+    queryClient.invalidateQueries({ queryKey: ['books'] })
+    queryClient.invalidateQueries({ queryKey: ['ratings'] })
+    queryClient.invalidateQueries({ queryKey: ['profile'] })
     reset()
     setSelectedStar(0)
   }
